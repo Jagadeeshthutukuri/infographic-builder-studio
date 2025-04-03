@@ -66,8 +66,12 @@ export default {
 				// Custom colors for our infographic builder
 				infographic: {
 					blue: '#4361EE',
-					purple: '#3F37C9',
+					purple: '#7E69AB',  // New purple color
 					pink: '#F72585',
+					teal: '#38B2AC',    // New teal color
+					orange: '#F97316',  // New orange color
+					yellow: '#FBBF24',  // New yellow color
+					green: '#10B981',   // New green color
 					lightgray: '#F8F9FA',
 					darkgray: '#212529'
 				}
@@ -111,13 +115,31 @@ export default {
 						transform: 'translateY(0)',
 						opacity: '1'
 					}
+				},
+				'float': {
+					'0%, 100%': {
+						transform: 'translateY(0)'
+					},
+					'50%': {
+						transform: 'translateY(-10px)'
+					}
+				},
+				'pulse-soft': {
+					'0%, 100%': {
+						opacity: '1'
+					},
+					'50%': {
+						opacity: '0.8'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out',
-				'slide-in': 'slide-in 0.3s ease-out'
+				'slide-in': 'slide-in 0.3s ease-out',
+				'float': 'float 3s ease-in-out infinite',
+				'pulse-soft': 'pulse-soft 2s ease-in-out infinite'
 			}
 		}
 	},

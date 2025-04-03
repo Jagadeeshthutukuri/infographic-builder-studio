@@ -10,11 +10,15 @@ import {
   MoveUp, 
   MoveDown, 
   RotateCcw,
-  Download
+  Download,
+  Camera,
+  Layers,
+  Palette
 } from 'lucide-react';
 import { useInfographic } from '@/contexts/InfographicContext';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Separator } from '@/components/ui/separator';
 
 const Toolbar: React.FC = () => {
   const { 
@@ -27,6 +31,12 @@ const Toolbar: React.FC = () => {
 
   // Handle adding new elements
   const handleAddShape = (shape: 'rect' | 'circle' | 'triangle') => {
+    const colors = {
+      rect: '#4361EE',
+      circle: '#F72585',
+      triangle: '#7E69AB'
+    };
+    
     addElement({
       type: 'shape',
       shape,
@@ -34,7 +44,7 @@ const Toolbar: React.FC = () => {
       y: 100,
       width: 100,
       height: 100,
-      color: shape === 'rect' ? '#4361EE' : shape === 'circle' ? '#F72585' : '#3F37C9'
+      color: colors[shape]
     });
   };
 
@@ -70,118 +80,159 @@ const Toolbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-4 border-b border-gray-200 flex items-center space-x-2">
-      <TooltipProvider>
-        <div className="border-r pr-2 mr-2 flex space-x-2">
+    <div className="bg-white p-3 border-b border-gray-200 flex items-center space-x-2 shadow-sm">
+      <TooltipProvider delayDuration={300}>
+        <div className="flex items-center space-x-1 bg-gray-50 rounded-md p-1 mr-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={() => handleAddShape('rect')}>
+              <Button variant="ghost" size="icon" className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-infographic-blue" onClick={() => handleAddShape('rect')}>
                 <Square className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Add Rectangle</TooltipContent>
+            <TooltipContent side="bottom">Add Rectangle</TooltipContent>
           </Tooltip>
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={() => handleAddShape('circle')}>
+              <Button variant="ghost" size="icon" className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-infographic-purple" onClick={() => handleAddShape('circle')}>
                 <Circle className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Add Circle</TooltipContent>
+            <TooltipContent side="bottom">Add Circle</TooltipContent>
           </Tooltip>
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={() => handleAddShape('triangle')}>
+              <Button variant="ghost" size="icon" className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-infographic-pink" onClick={() => handleAddShape('triangle')}>
                 <Triangle className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Add Triangle</TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={handleAddText}>
-                <Type className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Add Text</TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={handleAddImage}>
-                <Image className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Add Image</TooltipContent>
+            <TooltipContent side="bottom">Add Triangle</TooltipContent>
           </Tooltip>
         </div>
 
+        <div className="flex items-center space-x-1 bg-gray-50 rounded-md p-1 mr-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-infographic-blue" onClick={handleAddText}>
+                <Type className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Add Text</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-infographic-blue" onClick={handleAddImage}>
+                <Image className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Add Image</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-infographic-blue">
+                <Palette className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Color Palette</TooltipContent>
+          </Tooltip>
+        </div>
+
+        <Separator orientation="vertical" className="h-8 mx-1" />
+
         {/* Element manipulation buttons (only enabled when an element is selected) */}
-        <div className="border-r pr-2 mr-2 flex space-x-2">
+        <div className="flex items-center space-x-1 bg-gray-50 rounded-md p-1 mr-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button 
-                variant="outline" 
+                variant="ghost" 
                 size="icon" 
+                className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-red-500"
                 disabled={!selectedElementId}
                 onClick={() => selectedElementId && removeElement(selectedElementId)}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Delete Selected</TooltipContent>
+            <TooltipContent side="bottom">Delete Selected</TooltipContent>
           </Tooltip>
 
           <Tooltip>
             <TooltipTrigger asChild>
               <Button 
-                variant="outline" 
+                variant="ghost" 
                 size="icon" 
+                className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-infographic-blue"
                 disabled={!selectedElementId}
                 onClick={() => selectedElementId && changeElementZIndex(selectedElementId, 'forward')}
               >
                 <MoveUp className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Bring Forward</TooltipContent>
+            <TooltipContent side="bottom">Bring Forward</TooltipContent>
           </Tooltip>
 
           <Tooltip>
             <TooltipTrigger asChild>
               <Button 
-                variant="outline" 
-                size="icon" 
+                variant="ghost" 
+                size="icon"
+                className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-infographic-blue"
                 disabled={!selectedElementId}
                 onClick={() => selectedElementId && changeElementZIndex(selectedElementId, 'backward')}
               >
                 <MoveDown className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Send Backward</TooltipContent>
+            <TooltipContent side="bottom">Send Backward</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-infographic-blue"
+                disabled={!selectedElementId}
+              >
+                <Layers className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Manage Layers</TooltipContent>
           </Tooltip>
         </div>
 
+        <Separator orientation="vertical" className="h-8 mx-1" />
+
         {/* Canvas actions */}
-        <div className="flex space-x-2">
+        <div className="flex items-center space-x-1 bg-gray-50 rounded-md p-1">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={clearCanvas}>
+              <Button variant="ghost" size="icon" className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-amber-500" onClick={clearCanvas}>
                 <RotateCcw className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Clear Canvas</TooltipContent>
+            <TooltipContent side="bottom">Clear Canvas</TooltipContent>
           </Tooltip>
           
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={handleExport}>
+              <Button variant="ghost" size="icon" className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-green-500">
+                <Camera className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Take Screenshot</TooltipContent>
+          </Tooltip>
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-md h-8 w-8 text-gray-700 hover:bg-white hover:text-infographic-blue" onClick={handleExport}>
                 <Download className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Export Infographic</TooltipContent>
+            <TooltipContent side="bottom">Export Infographic</TooltipContent>
           </Tooltip>
         </div>
       </TooltipProvider>
