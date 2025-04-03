@@ -7,9 +7,12 @@ import Canvas from '@/components/Canvas';
 import TemplateSidebar from '@/components/TemplateSidebar';
 import PropertiesPanel from '@/components/PropertiesPanel';
 import WelcomeScreen from '@/components/WelcomeScreen';
+import { Toaster } from '@/components/ui/toaster';
 
 const InfographicEditor: React.FC = () => {
   const [showWelcome, setShowWelcome] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [propertiesPanelOpen, setPropertiesPanelOpen] = useState(true);
   
   // Check if this is the first visit
   useEffect(() => {
@@ -21,15 +24,30 @@ const InfographicEditor: React.FC = () => {
     }
   }, []);
 
+  // Toggle sidebar
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  // Toggle properties panel
+  const togglePropertiesPanel = () => {
+    setPropertiesPanelOpen(!propertiesPanelOpen);
+  };
+
   return (
     <InfographicProvider>
       {showWelcome && <WelcomeScreen onClose={() => setShowWelcome(false)} />}
       
       <div className="flex flex-col h-screen bg-gray-50">
-        <Header />
+        <Header 
+          onToggleSidebar={toggleSidebar} 
+          onTogglePropertiesPanel={togglePropertiesPanel}
+          sidebarOpen={sidebarOpen}
+          propertiesPanelOpen={propertiesPanelOpen}
+        />
         
         <div className="flex-1 flex overflow-hidden">
-          <TemplateSidebar />
+          {sidebarOpen && <TemplateSidebar />}
           
           <div className="flex-1 flex flex-col overflow-hidden">
             <Toolbar />
@@ -41,8 +59,10 @@ const InfographicEditor: React.FC = () => {
             </div>
           </div>
           
-          <PropertiesPanel />
+          {propertiesPanelOpen && <PropertiesPanel />}
         </div>
+        
+        <Toaster />
       </div>
     </InfographicProvider>
   );
